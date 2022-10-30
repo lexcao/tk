@@ -13,7 +13,7 @@ interface TagsAutocompleteProps {
 
 const TagsAutocomplete = ({uniqTags, tags, tagInput}: TagsAutocompleteProps) => {
   const [selectedOptions = [], setSelectedOptions] = [tags.value, tags.onChange];
-  const [inputValue, setInputValue] = [tagInput.value, tagInput.onChange];
+  const [inputValue = '', setInputValue] = [tagInput.value, tagInput.onChange];
 
   const options = useMemo(() => {
     const allOptions = [...new Set([...uniqTags, ...selectedOptions])];

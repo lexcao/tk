@@ -73,9 +73,10 @@ const Bookmarks = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const search = useField('');
   const isFiltered = search.dirty;
-  const searchTags = useMemo(() => search.value?.split(' ')?.filter(Boolean), [search.value]);
+  const {value: inputSearch = ''} = search;
+  const searchTags = useMemo(() => inputSearch.split(' ').filter(Boolean), [inputSearch]);
   const bookmarks = useMemo(() => {
-    if (!search.value) {
+    if (!inputSearch) {
       return allBookmarks
     }
 
@@ -83,7 +84,7 @@ const Bookmarks = () => {
     return searchTags.reduce((b, t) =>
         b.filter(hasTag(t)),
       allBookmarks);
-  }, [allBookmarks, search.value, searchTags]);
+  }, [allBookmarks, inputSearch, searchTags]);
 
   const filterControlMarkup = (
     <TextField
