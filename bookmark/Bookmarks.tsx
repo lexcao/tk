@@ -32,7 +32,7 @@ const emptySearchStateMarkup = (
 const shortenURL = (urlString: string) => {
   try {
     const url = new URL(urlString);
-    return url.hostname;
+    return url.hostname || urlString;
   } catch (e) {
     return urlString;
   }
@@ -55,7 +55,7 @@ const Bookmarks = () => {
   } = useBookmarks();
 
   useEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key == '/') {
+    if (e.key == '/' && !modalActive) {
       setSearchFocused(!searchFocused);
       e.preventDefault();
       return;
