@@ -6,6 +6,7 @@ import '@shopify/polaris/build/esm/styles.css';
 import {LinkLikeComponentProps} from "@shopify/polaris/build/ts/latest/src/utilities/link";
 import Link from "next/link";
 import Footer from "./Footer";
+import {AnalyticsWrapper} from "./AnalyticsWrapper";
 
 // TODO prefetch URL?
 function NextLink({url, children, external, ...rest}: LinkLikeComponentProps) {
@@ -48,6 +49,7 @@ export default function RootLayout({children}: {
         <Footer/>
       </footer>
     </AppProvider>
+    <AnalyticsWrapper/>
     </body>
     </html>
   );
