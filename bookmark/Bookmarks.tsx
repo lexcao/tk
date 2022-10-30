@@ -73,7 +73,7 @@ const Bookmarks = () => {
   const [searchFocused, setSearchFocused] = useState(false);
   const search = useField('');
   const isFiltered = search.dirty;
-  const searchTags = search.value.split(' ').filter(Boolean);
+  const searchTags = useMemo(() => search.value?.split(' ')?.filter(Boolean), [search.value]);
   const bookmarks = useMemo(() => {
     if (!search.value) {
       return allBookmarks
