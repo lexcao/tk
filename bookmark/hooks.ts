@@ -25,7 +25,6 @@ export const useBookmarks = () => {
   }
 
   const deleteBookmark = (id: Bookmark['id']) => {
-    console.log("Deleting...", id, allBookmarks)
     const index = allBookmarks.findIndex(it => it.id === id);
     setAll([
       ...allBookmarks.slice(0, index),

@@ -128,10 +128,6 @@ const Bookmarks = () => {
     toggleModal()
   }, [saveBookmark, toggleModal])
 
-  const onDeleteBookmark = useCallback((id: Bookmark['id']) => {
-    deleteBookmark(id)
-  }, [deleteBookmark]);
-
   const emptyStateMarkup = (
     <EmptyState heading="Create a bookmark to get started"
                 action={{
@@ -181,7 +177,9 @@ const Bookmarks = () => {
                 },
                 {
                   content: "delete",
-                  onAction: () => onDeleteBookmark(item.id)
+                  onAction() {
+                    deleteBookmark(item.id)
+                  }
                 }
               ]}>
               <Stack alignment="center">
