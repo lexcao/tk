@@ -91,8 +91,9 @@ const Bookmarks = () => {
       helpText={
         "[TODO]: Pro tips: Enter to choose first selected, ESC to cancel input"
       }
+      id="SearchTextField"
       label="Search"
-      labelHidden={true}
+      labelHidden
       placeholder="Search"
       suffix={<KeyboardKey>/</KeyboardKey>}
       type="text"
