@@ -1,4 +1,4 @@
-import {memo, useCallback, useMemo} from "react";
+import {memo, useCallback, useEffect, useMemo} from "react";
 import {Button, Combobox, Form, FormLayout, Listbox, Stack, Tag, TextField, TextStyle} from "@shopify/polaris";
 import {Bookmark} from "./types";
 import {lengthLessThan, notEmpty, notEmptyString, useField, useForm} from "@shopify/react-form";
@@ -180,6 +180,15 @@ const BookmarkForm = ({
     ]
   });
 
+  useEffect(() => {
+    if (!url.defaultValue && !!bookmark?.url) {
+      url.newDefaultValue(bookmark.url)
+    }
+    if (!!tags.defaultValue && !bookmark?.tags) {
+      tags.newDefaultValue(bookmark.tags)
+    }
+  }, [bookmark.tags, bookmark.url, tags, url])
+
   return (
     <Form onSubmit={submit}>
       <FormLayout>
@@ -188,6 +197,7 @@ const BookmarkForm = ({
           autoFocus
           label="URL"
           requiredIndicator
+          inputMode="url"
           autoComplete="false"
           {...url}/>
 

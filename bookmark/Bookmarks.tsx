@@ -92,6 +92,7 @@ const Bookmarks = () => {
         "[TODO]: Pro tips: Enter to choose first selected, ESC to cancel input"
       }
       id="SearchTextField"
+      inputMode="search"
       label="Search"
       labelHidden
       placeholder="Search"
