@@ -19,6 +19,7 @@ import {SearchMinor} from "@shopify/polaris-icons";
 import {useField} from "@shopify/react-form";
 import {Bookmark} from "./types";
 import BookmarkForm from './BookmarkForm';
+import History from './History';
 import {useBookmarks} from "./hooks";
 
 const emptySearchStateMarkup = (
@@ -49,6 +50,10 @@ const hasTag = (tag: string) => {
 const Bookmarks = () => {
   const {
     uniqTags,
+
+    histories,
+    addHistory,
+
     allBookmarks,
     saveBookmark,
     deleteBookmark,
@@ -139,8 +144,6 @@ const Bookmarks = () => {
                 image=""/>
   )
 
-  console.count("Parent.Render")
-
   return (
     <Card>
       <Card.Header
@@ -158,6 +161,9 @@ const Bookmarks = () => {
           </Modal.Section>
         </Modal>
       </Card.Header>
+      <Card.Section title="Histories">
+        <History histories={histories}/>
+      </Card.Section>
       <Card.Section>
         <ResourceList
           resourceName={{
@@ -169,6 +175,7 @@ const Bookmarks = () => {
             <ResourceList.Item
               id={item.id}
               url={item.url}
+              onClick={() => addHistory(item.id)}
               external
               persistActions
               shortcutActions={[

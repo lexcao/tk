@@ -4,6 +4,7 @@ import {useMemo} from "react";
 import {randomID} from "../util/id-generator";
 
 const key = "tk__bookmarks"
+const historyKey = "tk__bookmarks-histories"
 
 export const useBookmarks = () => {
   const [allBookmarks, setAll] = useLocalStorage<Bookmark[]>(key, []);
@@ -32,10 +33,24 @@ export const useBookmarks = () => {
       ...allBookmarks.slice(0, index),
       ...allBookmarks.slice(index + 1)
     ])
+
+    setAllHistories(prev => prev.filter(it => it !== id))
   }
+
+  const [allHistories, setAllHistories] = useLocalStorage<string[]>(historyKey, []);
+  const addHistory = (id: string) => {
+    setAllHistories(prev => [id, ...prev.filter(it => it !== id)])
+  }
+  const histories = allHistories
+  .slice(0, 5)
+  .map(it => allBookmarks.find(b => b.id === it)!);
 
   return {
     uniqTags,
+
+    histories,
+    addHistory,
+
     allBookmarks,
     saveBookmark,
     deleteBookmark
