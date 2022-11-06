@@ -11,6 +11,7 @@ export const useBookmarks = () => {
   const uniqTags = useMemo(() => [...new Set(allBookmarks.flatMap(it => it.tags))], [allBookmarks])
 
   const saveBookmark = (bookmark: Bookmark) => {
+    console.log("saveBookmark", bookmark)
     if (!bookmark.id) {
       setAll(allBookmarks.concat({...bookmark, id: randomID()}))
     } else {
@@ -25,6 +26,7 @@ export const useBookmarks = () => {
   }
 
   const deleteBookmark = (id: Bookmark['id']) => {
+    console.log("deleteBookmark", id)
     const index = allBookmarks.findIndex(it => it.id === id);
     setAll([
       ...allBookmarks.slice(0, index),

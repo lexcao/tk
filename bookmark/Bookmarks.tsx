@@ -139,12 +139,14 @@ const Bookmarks = () => {
                 image=""/>
   )
 
+  console.count("Parent.Render")
+
   return (
     <Card>
       <Card.Header
         title="Tag based bookmark manager">
+        {modalActivator}
         <Modal
-          activator={modalActivator}
           onClose={toggleModal}
           title={editingBookmark ? "Edit bookmark" : "Create bookmark"}
           open={modalActive}>

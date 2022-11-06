@@ -153,8 +153,8 @@ const BookmarkForm = ({
           }
         ]
       }),
-      tags: useField({
-        value: bookmark?.tags,
+      tags: useField<string[]>({
+        value: [...bookmark?.tags],
         validates: [
           notEmpty("tags is empty")
         ]
@@ -181,18 +181,24 @@ const BookmarkForm = ({
   });
 
   useEffect(() => {
-    if (!url.defaultValue && !!bookmark?.url) {
-      url.newDefaultValue(bookmark.url)
+    console.count("useEffect bookmark.tags")
+    if (bookmark?.tags.length !== 0) {
+      tags.reset();
     }
-    if (!!tags.defaultValue && !bookmark?.tags) {
-      tags.newDefaultValue(bookmark.tags)
+  }, [bookmark?.tags.length])
+
+  useEffect(() => {
+    console.count("useEffect bookmark.url")
+    if (!!bookmark?.url) {
+      url.reset();
     }
-  }, [bookmark.tags, bookmark.url, tags, url])
+  }, [bookmark?.url])
+
+  console.count("Render")
 
   return (
     <Form onSubmit={submit}>
       <FormLayout>
-
         <TextField
           autoFocus
           label="URL"
