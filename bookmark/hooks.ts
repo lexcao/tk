@@ -9,6 +9,13 @@ const historyKey = "tk__bookmarks-histories"
 export const useBookmarks = () => {
   const [allBookmarks, setAll] = useLocalStorage<Bookmark[]>(key, []);
 
+  const bookmarksById = useMemo(() => allBookmarks.reduce(
+    (prev, cur) => {
+      prev[cur.id] = cur
+      return prev
+    }, {} as Record<Bookmark['id'], Bookmark>
+  ), [allBookmarks]);
+
   const uniqTags = useMemo(() => [...new Set(allBookmarks.flatMap(it => it.tags))], [allBookmarks])
 
   const saveBookmark = (bookmark: Bookmark) => {
@@ -43,7 +50,7 @@ export const useBookmarks = () => {
   }
   const histories = allHistories
   .slice(0, 5)
-  .map(it => allBookmarks.find(b => b.id === it)!);
+  .map(it => bookmarksById[it]!);
 
   return {
     uniqTags,
