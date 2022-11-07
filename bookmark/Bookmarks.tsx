@@ -87,13 +87,10 @@ const Bookmarks = () => {
   const isFiltered = search.dirty || !!query.t;
   const {value: inputSearch = ''} = search;
 
-  const searchTags = useMemo(() => {
-    if (!!queryTags) {
-      return queryTags
-    } else {
-      return inputSearch.split(' ').filter(Boolean)
-    }
-  }, [inputSearch, queryTags]);
+  const searchTags = useMemo(() => [
+    ...queryTags,
+    ...inputSearch.split(' ').filter(Boolean)
+  ], [inputSearch, queryTags]);
 
   const bookmarks = useMemo(() => {
     if (searchTags.length === 0) {
