@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useMemo} from "react";
-import {Button, Combobox, Form, FormLayout, Listbox, Stack, Tag, TextField, TextStyle} from "@shopify/polaris";
+import {Button, Combobox, Form, FormLayout, Listbox, Stack, Tag, Text, TextField} from "@shopify/polaris";
 import {Bookmark} from "./types";
 import {lengthLessThan, notEmpty, notEmptyString, useField, useForm} from "@shopify/react-form";
 import {Field} from "@shopify/react-form/build/ts/types";
@@ -75,7 +75,7 @@ const TagsAutocomplete = ({uniqTags, tags, tagInput}: TagsAutocompleteProps) => 
       return (
         <p>
           {start}
-          <TextStyle variation="strong">{highlight}</TextStyle>
+          <Text fontWeight="bold" as="span" variant="bodyLg">{highlight}</Text>
           {end}
         </p>
       );

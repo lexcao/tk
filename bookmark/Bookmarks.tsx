@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  DisplayText,
   EmptySearchResult,
   EmptyState,
   Frame,
@@ -11,8 +10,8 @@ import {
   ResourceList,
   Stack,
   Tag,
+  Text,
   TextField,
-  TextStyle,
   useEventListener,
 } from '@shopify/polaris'
 import React, {memo, useCallback, useMemo, useState} from 'react'
@@ -126,8 +125,11 @@ const Bookmarks = () => {
     ? <Tag key={tag}>{tag}</Tag>
     : <Tag key={tag}>{
       searchTags.some(t => tag.startsWith(t))
-        ? <TextStyle variation="strong">{tag}</TextStyle>
-        : <><TextStyle variation="code">{tag[0]}</TextStyle>{tag.substring(1)}</>
+        ? <Text fontWeight="bold" variant="bodyLg" as="span">{tag}</Text>
+        : <Text variant="bodyMd" as="span">
+          <KeyboardKey>{tag[0]}</KeyboardKey>
+          {tag.substring(1)}
+        </Text>
     }</Tag>
 
   const [modalActive, setModalActive] = useState(false);
@@ -207,7 +209,7 @@ const Bookmarks = () => {
                   }
                 ]}>
                 <Stack alignment="center">
-                  <DisplayText size="small">{shortenURL(item.url)}</DisplayText>
+                  <Text variant="headingSm" as="h2">{shortenURL(item.url)}</Text>
                   <Stack>
                     {item.tags.map(tagMarkup)}
                   </Stack>

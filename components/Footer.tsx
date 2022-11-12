@@ -1,9 +1,9 @@
 import React, {memo} from "react"
-import {Link, Stack, TextStyle} from "@shopify/polaris";
+import {Link, Stack, Text} from "@shopify/polaris";
 
 const Footer = () => (
   <Stack vertical alignment="center">
-    <TextStyle variation="subdued">
+    <Text color="subdued" as="p" variant="bodyMd">
       Powered by {' '}
       <Link
         url="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -14,13 +14,13 @@ const Footer = () => (
       <Link url="https://polaris.shopify.com/" external>
         Shopify Polaris
       </Link>
-    </TextStyle>
-    <TextStyle variation="subdued">
+    </Text>
+    <Text color="subdued" as="p" variant="bodyMd">
       Created by {' '}
       <Link external url="https://lexcao.io">
         Lex
       </Link>
-    </TextStyle>
+    </Text>
   </Stack>
 )
 
