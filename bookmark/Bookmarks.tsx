@@ -1,27 +1,19 @@
 import {
-  Button,
   Card,
   EmptySearchResult,
   EmptyState,
-  Frame,
-  Icon,
   KeyboardKey,
   Modal,
   ResourceList,
   Stack,
   Tag,
   Text,
-  TextField,
-  useEventListener,
 } from '@shopify/polaris'
 import React, {memo, useCallback, useMemo, useState} from 'react'
-import {SearchMinor} from "@shopify/polaris-icons";
-import {useField} from "@shopify/react-form";
 import {Bookmark} from "./types";
 import BookmarkForm from './BookmarkForm';
 import History from './History';
 import {useBookmarks} from "./hooks";
-import TagNavigation from "./TagNavigation";
 import {useRouter} from "next/router";
 import {toArray} from "../util/to-array";
 
@@ -62,64 +54,27 @@ const Bookmarks = () => {
     deleteBookmark,
   } = useBookmarks();
 
-  useEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key == '/' && !modalActive) {
-      setSearchFocused(!searchFocused);
-      e.preventDefault();
-      return;
-    }
-
-    if (e.ctrlKey && e.key === 'n') {
-      handleCreateBookmark();
-      e.preventDefault();
-      return;
-    }
-  })
-
   const {query} = useRouter();
   const queryTags: string[] = toArray(query.t)
+  console.log(queryTags)
 
   const [editingBookmark, setEditingBookmark] = useState<Bookmark | undefined>();
 
-  const [searchFocused, setSearchFocused] = useState(false);
-  const search = useField('');
-  const isFiltered = search.dirty || !!query.t;
-  const {value: inputSearch = ''} = search;
+  const isFiltered = !!query.t;
 
   const searchTags = useMemo(() => [
     ...queryTags,
-    ...inputSearch.split(' ').filter(Boolean)
-  ], [inputSearch, queryTags]);
+  ], [queryTags]);
 
   const bookmarks = useMemo(() => {
     if (searchTags.length === 0) {
       return allBookmarks
     }
 
-    // search by tags
     return searchTags.reduce((b, t) =>
         b.filter(hasTag(t)),
       allBookmarks);
   }, [allBookmarks, searchTags]);
-
-  const filterControlMarkup = (
-    <TextField
-      helpText={
-        "[TODO]: Pro tips: Enter to choose first selected, ESC to cancel input"
-      }
-      id="SearchTextField"
-      inputMode="search"
-      label="Search"
-      labelHidden
-      placeholder="Search"
-      suffix={<KeyboardKey>/</KeyboardKey>}
-      type="text"
-      autoComplete="true"
-      focused={searchFocused}
-      role="search"
-      prefix={<Icon source={SearchMinor}/>}
-      {...search}/>
-  );
 
   const tagMarkup = (tag: string) => !isFiltered
     ? <Tag key={tag}>{tag}</Tag>
@@ -140,14 +95,10 @@ const Bookmarks = () => {
     toggleModal()
   }, [toggleModal])
 
-  const modalActivator = (
-    <Button plain onClick={handleCreateBookmark}>Create [Ctrl-n]</Button>
-  )
-
   const onSaveBookmark = useCallback((bookmark: Bookmark) => {
     saveBookmark(bookmark)
-    toggleModal()
-  }, [saveBookmark, toggleModal])
+    setModalActive(false)
+  }, [saveBookmark, setModalActive])
 
   const emptyStateMarkup = (
     <EmptyState heading="Create a bookmark to get started"
@@ -159,71 +110,64 @@ const Bookmarks = () => {
   )
 
   return (
-    <Frame navigation={<TagNavigation uniqTags={uniqTags}/>}>
-      <Card>
-        <Card.Header
-          title="Tag based bookmark manager">
-          {modalActivator}
-          <Modal
-            onClose={toggleModal}
-            title={editingBookmark ? "Edit bookmark" : "Create bookmark"}
-            open={modalActive}>
-            <Modal.Section>
-              <BookmarkForm
-                bookmark={editingBookmark}
-                uniqTags={uniqTags}
-                onSave={onSaveBookmark}/>
-            </Modal.Section>
-          </Modal>
-        </Card.Header>
-        <Card.Section title="Histories">
-          <History histories={histories}/>
-        </Card.Section>
-        <Card.Section>
-          <ResourceList
-            resourceName={{
-              plural: "bookmarks",
-              singular: "bookmark",
-            }}
-            items={bookmarks}
-            renderItem={(item) => (
-              <ResourceList.Item
-                id={item.id}
-                url={item.url}
-                onClick={() => addHistory(item.id)}
-                external
-                persistActions
-                shortcutActions={[
-                  {
-                    content: "edit",
-                    onAction() {
-                      setEditingBookmark(item);
-                      toggleModal();
-                    }
-                  },
-                  {
-                    content: "delete",
-                    onAction() {
-                      deleteBookmark(item.id)
-                    }
+    <Card actions={[{content: "Create", onAction: toggleModal}]}>
+      <Modal
+        onClose={toggleModal}
+        title={!!editingBookmark ? "Edit bookmark" : "Create bookmark"}
+        open={modalActive}>
+        <Modal.Section>
+          <BookmarkForm
+            bookmark={editingBookmark}
+            uniqTags={uniqTags}
+            onSave={onSaveBookmark}/>
+        </Modal.Section>
+      </Modal>
+      <Card.Section title="Histories">
+        <History histories={histories}/>
+      </Card.Section>
+      <Card.Section>
+        <ResourceList
+          resourceName={{
+            plural: "bookmarks",
+            singular: "bookmark",
+          }}
+          items={bookmarks}
+          renderItem={(item) => (
+            <ResourceList.Item
+              id={item.id}
+              url={item.url}
+              onClick={() => addHistory(item.id)}
+              external
+              persistActions
+              shortcutActions={[
+                {
+                  content: "edit",
+                  onAction() {
+                    setEditingBookmark(item);
+                    toggleModal();
                   }
-                ]}>
-                <Stack alignment="center">
-                  <Text variant="headingSm" as="h2">{shortenURL(item.url)}</Text>
-                  <Stack>
-                    {item.tags.map(tagMarkup)}
-                  </Stack>
+                },
+                {
+                  content: "delete",
+                  onAction() {
+                    deleteBookmark(item.id)
+                  }
+                }
+              ]}>
+              <Stack alignment="center">
+                <Text variant="headingSm" as="h2">{shortenURL(item.url)}</Text>
+                <Stack>
+                  {item.tags.map(tagMarkup)}
                 </Stack>
-              </ResourceList.Item>
-            )}
-            isFiltered={isFiltered}
-            filterControl={filterControlMarkup}
-            emptySearchState={emptySearchStateMarkup}
-            emptyState={emptyStateMarkup}
-          />
-        </Card.Section>
-      </Card>
-    </Frame>
+              </Stack>
+            </ResourceList.Item>
+          )}
+          isFiltered={isFiltered}
+          emptySearchState={emptySearchStateMarkup}
+          emptyState={emptyStateMarkup}
+        />
+      </Card.Section>
+    </Card>
   )
 }
 

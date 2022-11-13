@@ -1,23 +1,21 @@
 import '@shopify/polaris/build/esm/styles.css';
 import type {AppProps} from 'next/app'
-import PolarisProvider from "../components/PolarisProvider";
 import React from "react";
-import Footer from "../components/Footer";
-import {AnalyticsWrapper} from "../components/AnalyticsWrapper";
-import {Stack} from '@shopify/polaris';
+import RootLayout from "../components/RootLayout";
+import Head from "next/head";
+import {KBarProvider} from "kbar";
 
 export default function App({Component, pageProps}: AppProps) {
   return (
-    <PolarisProvider>
-      <Stack vertical>
-        <main style={{minHeight: "90vh"}}>
-          <Component {...pageProps} />
-        </main>
-        <footer style={{padding: "0.6rem"}}>
-          <Footer/>
-        </footer>
-      </Stack>
-      <AnalyticsWrapper/>
-    </PolarisProvider>
+    <KBarProvider>
+      <RootLayout>
+        <Head>
+          <title>TK - Tag book marK</title>
+          <link rel="icon" href="/favicon.ico"/>
+          <meta name="description" content="Tag based bookmark manager"/>
+        </Head>
+        <Component {...pageProps} />
+      </RootLayout>
+    </KBarProvider>
   )
 }
