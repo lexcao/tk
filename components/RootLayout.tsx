@@ -4,7 +4,7 @@ import TagNavigation from "../bookmark/TagNavigation";
 import PolarisProvider from "./PolarisProvider";
 import {useBookmarks} from "../bookmark/hooks";
 import Footer from "./Footer";
-import {useRouter} from "next/router";
+import TopSearchBar from "./TopSearchBar";
 
 export default function RootLayout({children}: PropsWithChildren) {
   const logo = {
@@ -18,22 +18,11 @@ export default function RootLayout({children}: PropsWithChildren) {
     <Text variant="headingLg" as="p">TK</Text>
   )
 
-  const {query, replace} = useRouter();
-  const search = query?.t?.toString() || '';
-
-  const searchFieldMarkup = (
-    <TopBar.SearchField
-      value={search}
-      placeholder="Search"
-      onChange={value => replace({query: {t: value}})}/>
-  )
-
   const topBarMarkup = (
     <TopBar
       showNavigationToggle
       logoSuffix={logoMarkup}
-      searchResultsOverlayVisible
-      searchField={searchFieldMarkup}/>
+      searchField={<TopSearchBar/>}/>
   )
 
   const {uniqTags} = useBookmarks()
