@@ -1,10 +1,10 @@
 import React, {PropsWithChildren} from "react";
-import {Frame, Stack, Text, TopBar} from "@shopify/polaris";
+import {Frame, Scrollable, Stack, Text, TopBar} from "@shopify/polaris";
 import TagNavigation from "../bookmark/TagNavigation";
 import PolarisProvider from "./PolarisProvider";
 import {useBookmarks} from "../bookmark/hooks";
-import Footer from "./Footer";
 import TopSearchBar from "./TopSearchBar";
+import Footer from "./Footer";
 
 export default function RootLayout({children}: PropsWithChildren) {
   const logo = {
@@ -20,13 +20,10 @@ export default function RootLayout({children}: PropsWithChildren) {
 
   const topBarMarkup = (
     <TopBar
-      showNavigationToggle
       logoSuffix={logoMarkup}
-      searchField={<TopSearchBar/>}/>
+      searchField={<TopSearchBar/>}
+    />
   )
-
-  const {uniqTags} = useBookmarks()
-  const navigationMarkup = <TagNavigation uniqTags={uniqTags}/>
 
   const pageMarkup = (
     <Stack vertical>
@@ -39,14 +36,18 @@ export default function RootLayout({children}: PropsWithChildren) {
     </Stack>
   )
 
+  const {uniqTags} = useBookmarks()
+
   return (
     <PolarisProvider>
       <Frame
         logo={logo}
         topBar={topBarMarkup}
-        navigation={navigationMarkup}
+        navigation={<TagNavigation uniqTags={uniqTags}/>}
       >
-        {pageMarkup}
+        <Scrollable>
+          {pageMarkup}
+        </Scrollable>
       </Frame>
     </PolarisProvider>
   )

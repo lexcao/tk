@@ -56,7 +56,6 @@ const Bookmarks = () => {
 
   const {query} = useRouter();
   const queryTags: string[] = toArray(query.t)
-  console.log(queryTags)
 
   const [editingBookmark, setEditingBookmark] = useState<Bookmark | undefined>();
 

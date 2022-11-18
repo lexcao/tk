@@ -9,7 +9,7 @@ const TopSearchBar = () => {
 
   useEffect(() => {
     replace({query: {t: search.value}})
-  }, [replace, search.value]);
+  }, [search.value]);
 
   return (
     <TopBar.SearchField placeholder="Search" {...search}/>
